@@ -28,88 +28,161 @@ function displayWelcome() {
             return;
         }
         console.log(data);
-        console.log('🚀 Manage your company\'s departments, roles, and employees easily!');
+        console.log(' Manage your company\'s departments, roles, and employees.');
         mainMenu(); // Start the main menu after displaying ASCII
     });
 }
 
-// Main Menu for CLI
 async function mainMenu() {
     const { action } = await inquirer.prompt([
-        {
-            type: 'list',
-            name: 'action',
-            message: 'What would you like to do?',
-            choices: [
-                'View All Departments',
-                'View All Roles',
-                'View All Employees',
-                'Add a Department',
-                'Add a Role',
-                'Add an Employee',
-                'Update Employee Role',
-                'Update Employee Manager',
-                'View Employees by Manager',
-                'View Employees by Department',
-                'Delete Department',
-                'Delete Role',
-                'Delete Employee',
-                'View Total Salaries of a Department',
-                'Exit'
-            ]
-        }
+      {
+        type: 'list',
+        name: 'action',
+        message: 'Main Menu: What would you like to do?',
+        choices: [
+          'Manage Departments',
+          'Manage Roles',
+          'Manage Employees',
+          'Exit'
+        ]
+      }
     ]);
-
+  
     switch (action) {
-        case 'View All Departments':
-            await viewDepartments();
-            break;
-        case 'View All Roles':
-            await viewRoles();
-            break;
-        case 'View All Employees':
-            await viewEmployees();
-            break;
-        case 'Add a Department':
-            await promptAddDepartment();
-            break;
-        case 'Add a Role':
-            await promptAddRole();
-            break;
-        case 'Add an Employee':
-            await promptAddEmployee();
-            break;
-        case 'Update Employee Role':
-            await promptUpdateEmployeeRole();
-            break;
-        case 'Update Employee Manager':
-            await promptUpdateEmployeeManager();
-            break;
-        case 'View Employees by Manager':
-            await promptViewEmployeesByManager();
-            break;
-        case 'View Employees by Department':
-            await promptViewEmployeesByDepartment();
-            break;
-        case 'Delete Department':
-            await promptDeleteDepartment();
-            break;
-        case 'Delete Role':
-            await promptDeleteRole();
-            break;
-        case 'Delete Employee':
-            await promptDeleteEmployee();
-            break;
-        case 'View Total Salaries of a Department':
-            await promptViewDepartmentBudget();
-            break;
-        case 'Exit':
-            console.log('👋 Goodbye!');
-            process.exit(0);
+      case 'Manage Departments':
+        await departmentMenu();
+        break;
+      case 'Manage Roles':
+        await roleMenu();
+        break;
+      case 'Manage Employees':
+        await employeeMenu();
+        break;
+      case 'Exit':
+        console.log(' Goodbye!');
+        process.exit(0);
     }
-
-    mainMenu(); // Return to the main menu after each action
-}
+  
+    // Return to main menu after the submenu is done
+    await mainMenu();
+  }
+  async function departmentMenu() {
+    const { deptAction } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'deptAction',
+        message: 'Department Menu: What would you like to do?',
+        choices: [
+          'View All Departments',
+          'Add Department',
+          'Delete Department',
+          'View Total Salaries in Department',
+          'Back to Main'
+        ]
+      }
+    ]);
+  
+    switch (deptAction) {
+      case 'View All Departments':
+        await viewDepartments(); // from queries.js
+        break;
+      case 'Add Department':
+        await promptAddDepartment();
+        break;
+      case 'Delete Department':
+        await promptDeleteDepartment();
+        break;
+      case 'View Total Salaries in Department':
+        await promptViewDepartmentBudget();
+        break;
+      case 'Back to Main':
+        return; // This exits departmentMenu() and goes back to mainMenu()
+    }
+  
+    // Loop back to the department menu until the user chooses "Back to Main"
+    await departmentMenu();
+  }
+  async function roleMenu() {
+    const { roleAction } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'roleAction',
+        message: 'Role Menu: What would you like to do?',
+        choices: [
+          'View All Roles',
+          'Add Role',
+          'Delete Role',
+          'Back to Main'
+        ]
+      }
+    ]);
+  
+    switch (roleAction) {
+      case 'View All Roles':
+        await viewRoles(); // from queries.js
+        break;
+      case 'Add Role':
+        await promptAddRole();
+        break;
+      case 'Delete Role':
+        await promptDeleteRole();
+        break;
+      case 'Back to Main':
+        return;
+    }
+  
+    // Return to the role menu until user chooses “Back”
+    await roleMenu();
+  }
+  async function employeeMenu() {
+    const { empAction } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'empAction',
+        message: 'Employee Menu: What would you like to do?',
+        choices: [
+          'View All Employees',
+          'Add Employee',
+          'Update Employee Role',
+          'Update Employee Manager',
+          'View Employees by Manager',
+          'View Employees by Department',
+          'Delete Employee',
+          'Back to Main'
+        ]
+      }
+    ]);
+  
+    switch (empAction) {
+      case 'View All Employees':
+        await viewEmployees();
+        break;
+      case 'Add Employee':
+        await promptAddEmployee();
+        break;
+      case 'Update Employee Role':
+        await promptUpdateEmployeeRole();
+        break;
+      case 'Update Employee Manager':
+        await promptUpdateEmployeeManager();
+        break;
+      case 'View Employees by Manager':
+        await promptViewEmployeesByManager();
+        break;
+      case 'View Employees by Department':
+        await promptViewEmployeesByDepartment();
+        break;
+      case 'Delete Employee':
+        await promptDeleteEmployee();
+        break;
+      case 'Back to Main':
+        return;
+    }
+  
+    // After action, stay in the Employee Menu
+    await employeeMenu();
+  }
+  
 
 //PROMPTS
 
