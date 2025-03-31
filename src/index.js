@@ -1,3 +1,4 @@
-const mainMenu = require('./cli/CLI');
+const displayWelcome = require('./cli/CLI');
 
-mainMenu();
+// Show the ASCII welcome screen
+displayWelcome();

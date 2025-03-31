@@ -1,4 +1,6 @@
 const inquirer = require('inquirer');
+const figlet = require('figlet');
+
 const {
     viewDepartments,
     viewRoles,
@@ -8,6 +10,19 @@ const {
     addEmployee,
     updateEmployeeRole
 } = require('../utils/queries');
+
+function displayWelcome() {
+    figlet('Employee Tracker', (err, data) => {
+        if (err) {
+            console.error('Error generating ASCII art:', err);
+            mainMenu(); // If figlet fails, go to main menu
+            return;
+        }
+        console.log(data);
+        console.log('Manage your company\'s departments, roles, and employees easily.');
+        mainMenu(); // Start the main menu after displaying ASCII
+    });
+}
 
 async function mainMenu() {
     const { action } = await inquirer.prompt([
@@ -96,4 +111,4 @@ async function promptUpdateEmployeeRole() {
     await updateEmployeeRole(employeeId, roleId);
 }
 
-module.exports = mainMenu;
+module.exports = displayWelcome;
